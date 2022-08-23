@@ -58,7 +58,16 @@ if(sys.argv[1]=="unpack"):
         outfile.write(data)
         outfile.close()
         print(f"Wrote {part.name} - {hex(len(data))} bytes")
-
+elif sys.argv[1] == "pack":
+    f = open(binary_file, "wb")
+    for part in bin_parts:
+        i = open(part.name, "rb")
+        data = i.read()
+        f.write(data)
+        padding = (int(part.size,16) - len(data))
+        print(f"Wrote {part.name} - {hex(len(data))} bytes")
+        print(f"Padding: {hex(padding)}")
+        f.write(b'\x00' * padding)
 
 
 
