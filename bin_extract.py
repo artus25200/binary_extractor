@@ -12,8 +12,6 @@ class BinPart:
         self.name = name
         self.offset = offset
         self.size = size
-    def __str__():
-        return {"name":f"{self.name}","offset":f"{self.offset}","size":f"{self.size}"}
 
 if(len(sys.argv) < 2):
     print("not enough arguments")
@@ -21,27 +19,30 @@ if(len(sys.argv) < 2):
 
 
 bin_parts = []
-bin_parts_json = []
+bin_parts_text = []
+config_json = []
 if(not os.path.exists(config) or sys.argv[1]=="config"):
     binary_file = input("binary file : ")
     while(True):
         name = input("Name of part (\"stop\" when enough) : ")
-        if(name=="stop"): break
+        if(name == "stop"): break
         offset = input("offset : ")
         size = input("size : ")
         bin_parts.append(BinPart(name, offset, size))
-        bin_parts_json.append({"name":f"{name}","offset":f"{offset}","size":f"{size}"})
-        print(bin_parts_json)
+        config_json.append({"name":f"{name}","offset":f"{offset}","size":f"{size}"})
+        print(config_json)
     cfg = open(config,"w")
     text = f"{{\"binary\":\"{binary_file}\",\"parts\":{json.dumps(bin_parts_json)}}}"
     cfg.write(text)
     cfg.close()
 
 
-bin_parts_json = json.loads(open(config,"r").read())
-print(bin_parts_json)
-binary_file=bin_parts_json["binary"]
-print(binary_file)
+config_json = json.loads(open(config,"r").read())
+print(config_json) #for debug purposes
+binary_file = config_json["binary"]
+print(binary_file) #same
+bin_parts_text = config_json["parts"]
+print(bin_parts_text) #same
 
 if(sys.argv[1]=="unpack"):
     f = open(binary_file, "rb")
